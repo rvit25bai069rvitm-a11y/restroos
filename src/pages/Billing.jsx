@@ -39,12 +39,12 @@ const Billing = () => {
   
   // Get active orders for this table
   const tableOrders = Object.values(orders).filter(
-    o => o.tableId === Number(selectedTableId) && o.status !== 'cancelled' && o.status !== 'served'
+    o => o.tableId === Number(selectedTableId) && o.status !== 'cancelled'
   );
 
   // If table has no current active orders, but has a current amount, we will mock the items list
   // to avoid showing an empty invoice. If table 12 is chosen and has no orders yet, we mock the default item sheet.
-  const hasActiveOrders = tableOrders.length > 0;
+  const hasActiveOrders = tableOrders.length > 0 && table.currentAmount > 0;
   
   // Calculate subtotal, gst, total
   let subtotal = 0;

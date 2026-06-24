@@ -9,6 +9,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Guest Ordering', path: '/guest-ordering' },
+    { name: 'Your Orders', path: '/your-orders' },
     { name: 'Kitchen Display', path: '/kitchen-display' },
     { name: 'Owner Dashboard', path: '/owner-dashboard' },
     { name: 'Billing & POS', path: '/billing' }

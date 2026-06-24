@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useRestOS } from '../context/RestOSContext';
 import { 
   ShoppingBag, 
@@ -10,7 +11,8 @@ import {
   Signal,
   Wifi,
   Battery,
-  AlertCircle
+  AlertCircle,
+  ClipboardList
 } from 'lucide-react';
 
 const MENU_DATA = {
@@ -51,6 +53,7 @@ const GuestOrdering = () => {
     tables, 
     requestBill, 
     setOrderTrackerStatus,
+    notifications = [],
     kpis
   } = useRestOS();
 
@@ -61,6 +64,7 @@ const GuestOrdering = () => {
   const [activeOrderId, setActiveOrderId] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null); // for bottom sheet
   const [instructions, setInstructions] = useState('');
+  const [qty, setQty] = useState(1);
   
   // Customization choices
   const [variant, setVariant] = useState('Regular');
@@ -95,6 +99,7 @@ const GuestOrdering = () => {
       noriSheets: false
     });
     setInstructions('');
+    setQty(1);
   };
 
   const handleAddToCart = () => {
@@ -117,7 +122,7 @@ const GuestOrdering = () => {
       spice,
       addOns: addOnList,
       instructions,
-      qty: 1,
+      qty,
       icon: selectedItem.icon
     };
 
@@ -125,11 +130,21 @@ const GuestOrdering = () => {
     setSelectedItem(null);
   };
 
+  const updateCartItemQty = (itemId, change) => {
+    setCart(prev => prev.map(item => {
+      if (item.id === itemId) {
+        const newQty = Math.max(1, item.qty + change);
+        return { ...item, qty: newQty };
+      }
+      return item;
+    }));
+  };
+
   const handlePlaceOrder = () => {
     if (cart.length === 0) return;
     
     // We target Table 12
-    const placedId = placeOrder(12, cart, activeOrderId);
+    const placedId = placeOrder(12, cart, null);
     setActiveOrderId(placedId);
     setCart([]);
     setCurrentScreen('tracker');
@@ -185,7 +200,7 @@ const GuestOrdering = () => {
             </div>
 
             {/* Top Status Bar */}
-            <div className="h-6 px-5 pt-1.5 flex justify-between items-center text-[10px] text-white/90 z-40 bg-blue-primary">
+            <div className="h-10 px-6 pt-4 pb-1.5 flex justify-between items-center text-[10px] text-white/90 z-40 bg-blue-primary">
               <span className="font-bold font-mono">12:34</span>
               <div className="flex items-center gap-1.5">
                 <Signal size={10} />
@@ -204,18 +219,34 @@ const GuestOrdering = () => {
                   <div className="px-4 py-3 flex justify-between items-center border-b border-blue-400/20 bg-blue-primary">
                     <span className="text-lg font-black uppercase tracking-wider">Rest<span className="text-yellow-400">OS</span></span>
                     
-                    {/* Cart Icon trigger */}
-                    <button 
-                      onClick={() => cart.length > 0 && setCurrentScreen('cart')}
-                      className={`relative p-2 rounded-full transition-colors ${cart.length > 0 ? 'bg-yellow-400 text-blue-950 font-bold' : 'bg-blue-light/50 text-white'}`}
-                    >
-                      <ShoppingBag size={16} />
-                      {cart.length > 0 && (
-                        <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border border-blue-primary">
-                          {cart.reduce((sum, item) => sum + item.qty, 0)}
-                        </span>
-                      )}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      {/* Your Orders/Tracker Icon trigger */}
+                      <button 
+                        onClick={() => setCurrentScreen('tracker')}
+                        className="relative p-2 rounded-full transition-colors bg-blue-light/50 text-white hover:bg-blue-light"
+                        title="Your Orders"
+                      >
+                        <ClipboardList size={16} />
+                        {Object.values(orders).filter(o => o.tableId === 12).length > 0 && (
+                          <span className="absolute -top-1 -right-1 bg-yellow-400 text-blue-950 text-[8px] font-black px-1 rounded-full border border-blue-primary">
+                            {Object.values(orders).filter(o => o.tableId === 12).length}
+                          </span>
+                        )}
+                      </button>
+
+                      {/* Cart Icon trigger */}
+                      <button 
+                        onClick={() => cart.length > 0 && setCurrentScreen('cart')}
+                        className={`relative p-2 rounded-full transition-colors ${cart.length > 0 ? 'bg-yellow-400 text-blue-950 font-bold' : 'bg-blue-light/50 text-white'}`}
+                      >
+                        <ShoppingBag size={16} />
+                        {cart.length > 0 && (
+                          <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border border-blue-primary">
+                            {cart.reduce((sum, item) => sum + item.qty, 0)}
+                          </span>
+                        )}
+                      </button>
+                    </div>
                   </div>
 
                   {/* Table active status banner */}
@@ -319,18 +350,18 @@ const GuestOrdering = () => {
 
                   {/* Order Tracker Link if active order exists */}
                   {activeOrderId && cart.length === 0 && (
-                    <div 
-                      onClick={() => setCurrentScreen('tracker')}
-                      className="absolute bottom-0 left-0 right-0 bg-blue-light text-white font-black px-4 py-3 flex justify-between items-center rounded-t-2xl shadow-2xl cursor-pointer hover:bg-blue-600 transition-colors z-30 border-t border-blue-400/20"
+                    <Link 
+                      to="/your-orders"
+                      className="absolute bottom-0 left-0 right-0 bg-blue-light text-white font-black px-4 py-3 flex justify-between items-center rounded-t-2xl shadow-2xl cursor-pointer hover:bg-blue-600 transition-colors z-30 border-t border-blue-400/20 text-center"
                     >
                       <span className="text-[10px] uppercase tracking-wider flex items-center gap-1.5">
                         <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse-green"></span>
-                        Active Order: {activeOrderId}
+                        Active Table Orders
                       </span>
                       <span className="text-[10px] uppercase tracking-widest flex items-center gap-1">
-                        TRACK STATUS <ChevronRight size={12} />
+                        VIEW BILL & TRACK STATUS <ChevronRight size={12} />
                       </span>
-                    </div>
+                    </Link>
                   )}
                 </div>
               )}
@@ -368,7 +399,21 @@ const GuestOrdering = () => {
                           </div>
 
                           <div className="flex justify-between items-center mt-2.5 pt-2 border-t border-white/5">
-                            <span className="text-[9px] text-white/60">Qty: {item.qty}</span>
+                            <div className="flex items-center gap-2">
+                              <button 
+                                onClick={() => updateCartItemQty(item.id, -1)}
+                                className="w-5 h-5 bg-white/10 hover:bg-white/20 text-white rounded flex items-center justify-center text-xs font-black"
+                              >
+                                -
+                              </button>
+                              <span className="text-[10px] font-black w-4 text-center">{item.qty}</span>
+                              <button 
+                                onClick={() => updateCartItemQty(item.id, 1)}
+                                className="w-5 h-5 bg-white/10 hover:bg-white/20 text-white rounded flex items-center justify-center text-xs font-black"
+                              >
+                                +
+                              </button>
+                            </div>
                             <button 
                               onClick={() => setCart(cart.filter(c => c.id !== item.id))}
                               className="text-[9px] uppercase font-bold text-red-400 hover:text-red-300"
@@ -410,117 +455,197 @@ const GuestOrdering = () => {
               )}
 
               {/* --- SCREEN 3: TRACKER / CONFIRMATION --- */}
-              {currentScreen === 'tracker' && activeOrder && (
+              {currentScreen === 'tracker' && (
                 <div className="flex flex-col h-full bg-blue-dark overflow-y-auto no-scrollbar p-4 text-center">
                   
                   {/* Top Header */}
-                  <div className="flex justify-between items-center mb-6">
+                  <div className="flex justify-between items-center mb-4 shrink-0">
                     <button 
                       onClick={() => setCurrentScreen('menu')} 
                       className="text-xs uppercase font-bold tracking-widest text-blue-200 hover:text-white flex items-center gap-1"
                     >
                       <ArrowLeft size={14} /> Menu
                     </button>
-                    <span className="text-[10px] font-mono bg-blue-primary/50 px-2 py-0.5 rounded text-blue-200">
-                      Table 12
+                    <span className="text-[10px] font-black uppercase tracking-wider bg-blue-primary px-3 py-1 rounded-full text-white">
+                      Table 12 Dashboard
+                    </span>
+                    <span className="text-[10px] font-bold text-yellow-400">
+                      Total: ₹{tables[12]?.currentAmount || 0}
                     </span>
                   </div>
 
-                  {/* Success Circle */}
-                  <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-green-600/30 animate-bounce">
-                    <Check size={28} className="text-white font-bold" />
-                  </div>
-
-                  <h3 className="text-xl font-black uppercase tracking-wider text-white">ORDER TRANSMITTED</h3>
-                  <p className="text-[11px] text-blue-200 mt-1">Estimating wait time at 15 minutes</p>
-
-                  {/* Info box */}
-                  <div className="bg-blue-primary/40 rounded-xl p-3 my-4 text-left border border-blue-400/10">
-                    <div className="flex justify-between font-bold text-xs">
-                      <span>Order ID</span>
-                      <span className="text-yellow-400 font-mono">{activeOrder.id}</span>
+                  {/* If Table is Free (Paid & Settled) */}
+                  {tables[12]?.status === 'free' && Object.values(orders).filter(o => o.tableId === 12 && o.status !== 'cancelled').length === 0 ? (
+                    <div className="flex-grow flex flex-col items-center justify-center py-12 px-4 space-y-6">
+                      <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center border-4 border-green-600/30 animate-bounce">
+                        <Check size={32} className="text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-black uppercase tracking-wider text-white">PAID & SETTLED</h3>
+                        <p className="text-xs text-blue-200 mt-2 leading-relaxed">
+                          Your table session has been settled. Thank you for dining with us!
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setActiveOrderId(null);
+                          setCurrentScreen('menu');
+                        }}
+                        className="px-6 py-3 bg-yellow-400 text-blue-950 font-black text-xs uppercase tracking-widest rounded-xl hover:bg-yellow-300 transition-colors shadow-lg"
+                      >
+                        Place New Order
+                      </button>
                     </div>
-                    <div className="flex justify-between text-[10px] text-blue-200 mt-1">
-                      <span>Round</span>
-                      <span>{activeOrder.round}</span>
-                    </div>
-                    <div className="flex justify-between text-[10px] text-blue-200">
-                      <span>Amount</span>
-                      <span>₹{activeOrder.total}</span>
-                    </div>
-                  </div>
-
-                  {/* Vertical Timeline Status Tracker */}
-                  <div className="my-4 text-left max-w-[240px] mx-auto relative pl-6 border-l-2 border-dotted border-blue-400/40 space-y-6">
-                    
-                    {[
-                      { key: 'new', label: 'ORDER PLACED', sub: 'Sent to KDS screen' },
-                      { key: 'accepted', label: 'ACCEPTED', sub: 'Acknowledged by kitchen' },
-                      { key: 'preparing', label: 'PREPARING', sub: 'Items are being cooked' },
-                      { key: 'ready', label: 'READY', sub: 'Ready for table pick-up' },
-                      { key: 'served', label: 'SERVED', sub: 'Delivered to your table' }
-                    ].map((step, idx) => {
-                      // Logic for active state
-                      const statuses = ['new', 'accepted', 'preparing', 'ready', 'served'];
-                      const currentIdx = statuses.indexOf(activeOrder.status);
-                      const stepIdx = statuses.indexOf(step.key);
-                      const isActive = stepIdx <= currentIdx;
-                      const isExact = step.key === activeOrder.status;
-
-                      return (
-                        <div 
-                          key={step.key} 
-                          onClick={() => setOrderTrackerStatus(activeOrder.id, step.key)}
-                          className="relative cursor-pointer group"
-                        >
-                          {/* Dot indicator */}
-                          <div className={`absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                            isExact 
-                              ? 'bg-yellow-400 border-yellow-400 scale-110' 
-                              : isActive 
-                              ? 'bg-green-500 border-green-500' 
-                              : 'bg-blue-dark border-blue-400/40 group-hover:border-blue-300'
-                          }`}>
-                            {isActive && !isExact && <Check size={8} className="text-white font-bold" />}
-                          </div>
-
-                          <div className="text-[11px] font-black uppercase tracking-wider text-white">
-                            {step.label}
-                            {isExact && <span className="text-[8px] bg-yellow-400 text-blue-950 font-black px-1 rounded ml-1.5 animate-pulse">ACTIVE</span>}
-                          </div>
-                          <div className="text-[9px] text-blue-200/70">{step.sub}</div>
+                  ) : (
+                    <div className="flex-grow flex flex-col justify-between text-left space-y-4">
+                      
+                      {/* Active Session Status */}
+                      <div className="bg-white/5 border border-white/10 rounded-xl p-3 text-xs flex justify-between items-center shrink-0">
+                        <div>
+                          <p className="font-bold text-white uppercase tracking-wider text-[10px]">Session Status</p>
+                          <p className="text-[10px] text-blue-200 mt-0.5 font-medium">
+                            {tables[12]?.status === 'bill_requested' ? '🔔 Bill Requested' : '🍽️ Dining Active'}
+                          </p>
                         </div>
-                      );
-                    })}
-                  </div>
+                        <button
+                          onClick={handleRequestBill}
+                          disabled={isTableBillRequested || (tables[12]?.currentAmount || 0) === 0}
+                          className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${
+                            isTableBillRequested
+                              ? 'bg-green-600 text-white cursor-not-allowed'
+                              : (tables[12]?.currentAmount || 0) === 0
+                              ? 'bg-white/10 text-white/40 cursor-not-allowed'
+                              : 'bg-amber-500 hover:bg-amber-400 text-white'
+                          }`}
+                        >
+                          {isTableBillRequested ? 'Bill Requested ✓' : 'Request Bill'}
+                        </button>
+                      </div>
 
-                  {/* Demo Simulation Note */}
-                  <div className="bg-yellow-400/10 border border-yellow-400/20 text-yellow-300 rounded-lg p-2 text-[9px] mb-4 flex items-start gap-1.5 text-left">
-                    <AlertCircle size={12} className="shrink-0 mt-0.5" />
-                    <p><strong>Demo Mode:</strong> Tap any state step above (e.g. READY or SERVED) to simulate kitchen update in real time.</p>
-                  </div>
+                      {/* Orders List Container */}
+                      <div className="flex-grow space-y-3 overflow-y-auto no-scrollbar pr-1 max-h-[300px]">
+                        <h4 className="text-[10px] font-black uppercase tracking-wider text-blue-200 mb-1">
+                          Placed Orders ({Object.values(orders).filter(o => o.tableId === 12).length})
+                        </h4>
 
-                  {/* Action Buttons */}
-                  <div className="space-y-2 mt-auto">
-                    <button
-                      onClick={handleOrderMore}
-                      className="w-full py-2.5 border border-blue-400/40 text-blue-100 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-light/10 transition-colors"
-                    >
-                      + ORDER MORE (Round 2)
-                    </button>
+                        {Object.values(orders)
+                          .filter(o => o.tableId === 12)
+                          .sort((a, b) => b.id.localeCompare(a.id))
+                          .map((order) => {
+                            const isCancelled = order.status === 'cancelled';
+                            const statuses = ['new', 'accepted', 'preparing', 'ready', 'served'];
+                            const currentIdx = statuses.indexOf(order.status);
 
-                    <button
-                      onClick={handleRequestBill}
-                      disabled={isTableBillRequested}
-                      className={`w-full py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow ${
-                        isTableBillRequested
-                          ? 'bg-green-600 text-white cursor-not-allowed'
-                          : 'bg-amber-500 text-white hover:bg-amber-400'
-                      }`}
-                    >
-                      {isTableBillRequested ? 'Bill Requested ✓' : 'REQUEST BILL'}
-                    </button>
-                  </div>
+                            return (
+                              <div 
+                                key={order.id}
+                                className={`p-3 rounded-xl border text-[11px] font-semibold ${
+                                  isCancelled
+                                    ? 'bg-red-500/10 border-red-500/30 text-red-200'
+                                    : order.status === 'ready'
+                                    ? 'bg-green-500/10 border-green-500/30 text-green-200 animate-pulse'
+                                    : 'bg-white/5 border-white/10 text-white'
+                                }`}
+                              >
+                                <div className="flex justify-between items-center pb-1.5 border-b border-white/10 mb-2">
+                                  <div>
+                                    <span className="font-mono font-black">{order.id}</span>
+                                    <span className="text-[8px] bg-white/10 px-1 py-0.5 rounded ml-1.5">Round {order.round}</span>
+                                  </div>
+                                  <span className={`text-[8px] font-black px-2 py-0.5 rounded uppercase ${
+                                    isCancelled
+                                      ? 'bg-red-500 text-white'
+                                      : order.status === 'ready'
+                                      ? 'bg-green-500 text-white font-extrabold'
+                                      : 'bg-blue-500 text-white'
+                                  }`}>
+                                    {order.status}
+                                  </span>
+                                </div>
+
+                                <div className="space-y-1 mb-3">
+                                  {order.items.map((item, idx) => (
+                                    <div key={idx} className="flex justify-between text-[10px] opacity-90">
+                                      <span>{item.qty}x {item.name} <span className="text-[8px] opacity-60">({item.variant})</span></span>
+                                      <span>₹{item.price * item.qty}</span>
+                                    </div>
+                                  ))}
+                                </div>
+
+                                {isCancelled ? (
+                                  <div className="bg-red-500/15 border border-red-500/30 rounded-lg p-2 text-[9px] text-red-200 leading-normal">
+                                    <strong>Declined:</strong> {order.cancelReason || 'Unavailable'}
+                                  </div>
+                                ) : (
+                                  <div className="relative pt-1 px-1">
+                                    <div className="absolute top-[13px] left-2 right-2 h-0.5 bg-white/10 -z-10"></div>
+                                    <div 
+                                      className="absolute top-[13px] left-2 h-0.5 bg-yellow-400 -z-10 transition-all duration-300" 
+                                      style={{ width: `${(Math.min(currentIdx, 4) / 4) * 90}%` }}
+                                    ></div>
+                                    <div className="flex justify-between text-[8px] font-black uppercase tracking-wider">
+                                      {['Placed', 'Accepted', 'Cooking', 'Ready', 'Served'].map((step, idx) => {
+                                        const isActive = idx <= currentIdx;
+                                        const isExact = idx === currentIdx;
+                                        return (
+                                          <div 
+                                            key={step} 
+                                            onClick={() => setOrderTrackerStatus(order.id, statuses[idx])}
+                                            className="flex flex-col items-center cursor-pointer"
+                                          >
+                                            <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center mb-1 ${
+                                              isExact 
+                                                ? 'bg-yellow-400 border-yellow-400 animate-pulse' 
+                                                : isActive 
+                                                ? 'bg-green-500 border-green-500' 
+                                                : 'bg-blue-dark border-white/20'
+                                            }`}>
+                                              {isActive && !isExact && <Check size={6} className="text-white font-bold" />}
+                                            </div>
+                                            <span className={isExact ? 'text-yellow-400 font-extrabold' : 'opacity-65'}>{step}</span>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                      </div>
+
+                      {/* Micro Live Activity Feed inside phone */}
+                      <div className="bg-blue-primary/30 border border-white/10 rounded-xl p-3 text-left shrink-0">
+                        <div className="flex items-center justify-between pb-1.5 border-b border-white/5 mb-1.5">
+                          <span className="text-[9px] font-black uppercase tracking-wider text-blue-200">Live Kitchen Updates</span>
+                          <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse-green"></span>
+                        </div>
+                        <div className="space-y-1 max-h-[60px] overflow-y-auto no-scrollbar text-[9px] font-semibold text-blue-100">
+                          {notifications.filter(n => n.message.includes('Table 12') || n.message.toLowerCase().includes('order')).slice(0, 3).map((notif) => (
+                            <div key={notif.id} className="flex justify-between py-0.5 border-b border-white/5 last:border-0 gap-2">
+                              <span className="truncate flex-1">{notif.message}</span>
+                              <span className="opacity-60 shrink-0 font-mono text-[8px]">{notif.timestamp}</span>
+                            </div>
+                          ))}
+                          {notifications.filter(n => n.message.includes('Table 12') || n.message.toLowerCase().includes('order')).length === 0 && (
+                            <p className="text-center opacity-40 py-1">No recent updates</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="space-y-2 mt-auto pt-2 shrink-0">
+                        <button
+                          onClick={handleOrderMore}
+                          className="w-full py-2.5 border border-white/20 text-white hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition-colors"
+                        >
+                          + Order More (Round 2)
+                        </button>
+                      </div>
+
+                    </div>
+                  )}
+
                 </div>
               )}
 
@@ -632,6 +757,27 @@ const GuestOrdering = () => {
                           className="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-blue-primary bg-slate-50"
                         />
                       </div>
+
+                      {/* Quantity Selection */}
+                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Quantity</span>
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => setQty(q => Math.max(1, q - 1))}
+                            className="w-7 h-7 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl flex items-center justify-center font-black text-sm transition-colors"
+                          >
+                            -
+                          </button>
+                          <span className="text-sm font-black w-4 text-center">{qty}</span>
+                          <button
+                            onClick={() => setQty(q => q + 1)}
+                            className="w-7 h-7 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl flex items-center justify-center font-black text-sm transition-colors"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
                     </div>
 
                     {/* Checkout Button */}
@@ -641,11 +787,11 @@ const GuestOrdering = () => {
                         className="w-full py-3.5 bg-blue-primary text-white font-black text-xs uppercase tracking-widest rounded-xl hover:bg-blue-dark transition-colors shadow-md"
                       >
                         ADD TO CART &bull; ₹{
-                          selectedItem.price + 
+                          (selectedItem.price + 
                           (addOns.extraCheese ? 50 : 0) + 
                           (addOns.extraEgg ? 40 : 0) + 
                           (addOns.extraSauce ? 30 : 0) + 
-                          (addOns.noriSheets ? 20 : 0)
+                          (addOns.noriSheets ? 20 : 0)) * qty
                         }
                       </button>
                     </div>

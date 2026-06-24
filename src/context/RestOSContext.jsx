@@ -78,6 +78,7 @@ const DEFAULT_STATE = {
   kpis: DEFAULT_KPIS,
   lastAction: 'System Initialized',
   lastActionTime: new Date().toLocaleTimeString(),
+  notifications: [],
   transactions: [
     { tableId: 4, amount: 1420, method: 'UPI', time: '1:15 PM' },
     { tableId: 7, amount: 850, method: 'Cash', time: '12:48 PM' },
@@ -129,8 +130,22 @@ export const RestOSProvider = ({ children }) => {
 
   const updateState = (newState, actionLabel, toastData = null) => {
     const timeStr = new Date().toLocaleTimeString();
+    
+    // Add notification to history if toastData is provided
+    let updatedNotifications = newState.notifications || [];
+    if (toastData) {
+      const newNotif = {
+        id: Date.now() + Math.random().toString(36).substr(2, 9),
+        message: toastData.message,
+        type: toastData.type,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+      };
+      updatedNotifications = [newNotif, ...updatedNotifications].slice(0, 30);
+    }
+
     const finalState = {
       ...newState,
+      notifications: updatedNotifications,
       lastAction: actionLabel,
       lastActionTime: timeStr
     };

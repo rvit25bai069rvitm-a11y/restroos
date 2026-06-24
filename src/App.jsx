@@ -11,6 +11,7 @@ import GuestOrdering from './pages/GuestOrdering';
 import KitchenDisplay from './pages/KitchenDisplay';
 import OwnerDashboard from './pages/OwnerDashboard';
 import Billing from './pages/Billing';
+import YourOrders from './pages/YourOrders';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/guest-ordering" element={<GuestOrdering />} />
+              <Route path="/your-orders" element={<YourOrders />} />
               <Route path="/kitchen-display" element={<KitchenDisplay />} />
               <Route path="/owner-dashboard" element={<OwnerDashboard />} />
               <Route path="/billing" element={<Billing />} />
