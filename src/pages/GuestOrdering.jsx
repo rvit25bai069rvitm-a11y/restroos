@@ -17,33 +17,33 @@ import {
 
 const MENU_DATA = {
   STARTERS: [
-    { id: 'st-1', name: 'Veg Gyoza', price: 220, type: 'veg', icon: '🥟', desc: 'Pan-fried Japanese dumplings with mixed vegetables stuffing.' },
-    { id: 'st-2', name: 'Chicken Karaage', price: 320, type: 'non-veg', icon: '🍗', desc: 'Crispy deep-fried Japanese chicken marinated with soy sauce.' },
-    { id: 'st-3', name: 'Tempura Prawns', price: 450, type: 'non-veg', icon: '🍤', desc: 'Lightly battered and deep-fried prawns served with tempura sauce.' },
-    { id: 'st-4', name: 'Edamame', price: 180, type: 'veg', icon: '🫛', desc: 'Steamed soybeans sprinkled with coarse sea salt.' }
+    { id: 'st-1', name: 'Veg Gyoza', price: 220, type: 'veg', icon: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?q=80&w=200&auto=format&fit=crop', desc: 'Pan-fried Japanese dumplings with mixed vegetables stuffing.' },
+    { id: 'st-2', name: 'Chicken Karaage', price: 320, type: 'non-veg', icon: 'https://images.unsplash.com/photo-1562967914-01efa7e87832?q=80&w=200&auto=format&fit=crop', desc: 'Crispy deep-fried Japanese chicken marinated with soy sauce.' },
+    { id: 'st-3', name: 'Tempura Prawns', price: 450, type: 'non-veg', icon: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?q=80&w=200&auto=format&fit=crop', desc: 'Lightly battered and deep-fried prawns served with tempura sauce.' },
+    { id: 'st-4', name: 'Edamame', price: 180, type: 'veg', icon: 'https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?q=80&w=200&auto=format&fit=crop', desc: 'Steamed soybeans sprinkled with coarse sea salt.' }
   ],
   SUSHI: [
-    { id: 'su-1', name: 'California Roll', price: 420, type: 'non-veg', icon: '🍣', desc: 'Crabstick, avocado, cucumber rolled with sesame seeds.' },
-    { id: 'su-2', name: 'Avocado Maki', price: 350, type: 'veg', icon: '🥑', desc: 'Simple and elegant avocado wrapped in seaweed rice roll.' },
-    { id: 'su-3', name: 'Salmon Nigiri', price: 520, type: 'non-veg', icon: '🍣', desc: 'Fresh slices of salmon over hand-formed vinegared rice.' }
+    { id: 'su-1', name: 'California Roll', price: 420, type: 'non-veg', icon: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?q=80&w=200&auto=format&fit=crop', desc: 'Crabstick, avocado, cucumber rolled with sesame seeds.' },
+    { id: 'su-2', name: 'Avocado Maki', price: 350, type: 'veg', icon: 'https://images.unsplash.com/photo-1611143669185-af224c5e3252?q=80&w=200&auto=format&fit=crop', desc: 'Simple and elegant avocado wrapped in seaweed rice roll.' },
+    { id: 'su-3', name: 'Salmon Nigiri', price: 520, type: 'non-veg', icon: 'https://images.unsplash.com/photo-1553621042-f6e147245754?q=80&w=200&auto=format&fit=crop', desc: 'Fresh slices of salmon over hand-formed vinegared rice.' }
   ],
   RAMEN: [
-    { id: 'ra-1', name: 'Miso Ramen', price: 420, type: 'veg', icon: '🍜', desc: 'Ramen noodles served in rich soybean paste broth with tofu.' },
-    { id: 'ra-2', name: 'Spicy Chicken Ramen', price: 480, type: 'non-veg', icon: '🍜', desc: 'Fiery chicken broth with noodles, roasted chicken slices, bamboo shoot.' },
-    { id: 'ra-3', name: 'Tonkotsu Ramen', price: 560, type: 'non-veg', icon: '🍜', desc: 'Creamy and rich pork bone broth ramen served with chashu pork slices.' }
+    { id: 'ra-1', name: 'Miso Ramen', price: 420, type: 'veg', icon: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=200&auto=format&fit=crop', desc: 'Ramen noodles served in rich soybean paste broth with tofu.' },
+    { id: 'ra-2', name: 'Spicy Chicken Ramen', price: 480, type: 'non-veg', icon: 'https://images.unsplash.com/photo-1591814468924-caf88d1232e1?q=80&w=200&auto=format&fit=crop', desc: 'Fiery chicken broth with noodles, roasted chicken slices, bamboo shoot.' },
+    { id: 'ra-3', name: 'Tonkotsu Ramen', price: 560, type: 'non-veg', icon: 'https://images.unsplash.com/photo-1552611052-33e04de081de?q=80&w=200&auto=format&fit=crop', desc: 'Creamy and rich pork bone broth ramen served with chashu pork slices.' }
   ],
   DESSERTS: [
-    { id: 'de-1', name: 'Chocolate Mochi', price: 220, type: 'veg', icon: '🍮', desc: 'Sweet glutinous rice cake stuffed with rich chocolate ganache.' },
-    { id: 'de-2', name: 'Matcha Ice Cream', price: 180, type: 'veg', icon: '🍨', desc: 'Creamy green tea flavoured authentic Japanese ice cream.' }
+    { id: 'de-1', name: 'Chocolate Mochi', price: 220, type: 'veg', icon: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=200&auto=format&fit=crop', desc: 'Sweet glutinous rice cake stuffed with rich chocolate ganache.' },
+    { id: 'de-2', name: 'Matcha Ice Cream', price: 180, type: 'veg', icon: 'https://images.unsplash.com/photo-1505394033641-40c6ad1178d7?q=80&w=200&auto=format&fit=crop', desc: 'Creamy green tea flavoured authentic Japanese ice cream.' }
   ]
 };
 
 // Add categories with icons
 const CATEGORIES = [
-  { key: 'STARTERS', name: 'Starters', icon: '🥗' },
-  { key: 'SUSHI', name: 'Sushi', icon: '🍣' },
-  { key: 'RAMEN', name: 'Ramen', icon: '🍜' },
-  { key: 'DESSERTS', name: 'Desserts', icon: '🍮' }
+  { key: 'STARTERS', name: 'Starters', icon: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=100&auto=format&fit=crop' },
+  { key: 'SUSHI', name: 'Sushi', icon: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?q=80&w=100&auto=format&fit=crop' },
+  { key: 'RAMEN', name: 'Ramen', icon: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=100&auto=format&fit=crop' },
+  { key: 'DESSERTS', name: 'Desserts', icon: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=100&auto=format&fit=crop' }
 ];
 
 const GuestOrdering = () => {
@@ -192,26 +192,26 @@ const GuestOrdering = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left 60%: Android Frame */}
         <div className="lg:col-span-7 flex justify-center">
-          <div className="relative w-[360px] h-[720px] bg-slate-900 rounded-[50px] p-3 shadow-2xl border-4 border-slate-700 flex flex-col overflow-hidden">
+          <div className="relative w-[360px] h-[720px] bg-slate-900 rounded-[50px] p-3 shadow-2xl border-4 border-slate-700 flex flex-col">
             {/* Camera notch */}
-            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-32 h-5 bg-black rounded-full z-50 flex items-center justify-center">
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-full z-50 flex items-center justify-center">
               <span className="w-2.5 h-2.5 bg-gray-800 rounded-full mr-2"></span>
               <span className="w-1.5 h-1.5 bg-blue-900 rounded-full"></span>
-            </div>
-
-            {/* Top Status Bar */}
-            <div className="h-10 px-6 pt-4 pb-1.5 flex justify-between items-center text-[10px] text-white/90 z-40 bg-blue-primary">
-              <span className="font-bold font-mono">12:34</span>
-              <div className="flex items-center gap-1.5">
-                <Signal size={10} />
-                <Wifi size={10} />
-                <Battery size={12} className="rotate-90" />
-              </div>
             </div>
 
             {/* Screen Inner Container */}
             <div className="flex-1 bg-blue-primary relative flex flex-col overflow-hidden rounded-[38px] select-none text-white">
               
+              {/* Top Status Bar */}
+              <div className="h-10 px-6 pt-3 pb-1.5 flex justify-between items-center text-[10px] text-white/90 z-40">
+                <span className="font-bold font-mono">12:34</span>
+                <div className="flex items-center gap-1.5">
+                  <Signal size={10} />
+                  <Wifi size={10} />
+                  <Battery size={12} className="rotate-90" />
+                </div>
+              </div>
+
               {/* --- SCREEN 1: MENU --- */}
               {currentScreen === 'menu' && (
                 <div className="flex flex-col h-full relative">
@@ -282,10 +282,10 @@ const GuestOrdering = () => {
                           onClick={() => selectCategory(cat.key)}
                           className={`flex flex-col items-center transition-all ${activeCategory === cat.key ? 'scale-110 opacity-100' : 'opacity-60 hover:opacity-85'}`}
                         >
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg shadow-sm border ${
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg shadow-sm border overflow-hidden ${
                             activeCategory === cat.key ? 'bg-yellow-400 border-yellow-400' : 'bg-blue-primary/40 border-blue-400/15'
                           }`}>
-                            {cat.icon}
+                            <img src={cat.icon} alt={cat.name} className="w-full h-full object-cover" />
                           </div>
                           <span className="text-[7px] font-black tracking-wider uppercase mt-1 text-center truncate w-12 text-blue-100">
                             {cat.name}
@@ -295,8 +295,13 @@ const GuestOrdering = () => {
                       {/* Additional static categories for visual filler */}
                       {['Mains', 'Drinks', 'Mocktails', 'Specials'].map((fill, i) => (
                         <div key={i} className="flex flex-col items-center opacity-30 cursor-not-allowed">
-                          <div className="w-10 h-10 rounded-full bg-blue-primary/20 border border-blue-400/10 flex items-center justify-center text-lg">
-                            {['🍽️', '🥤', '🧃', '⭐'][i]}
+                          <div className="w-10 h-10 rounded-full bg-blue-primary/20 border border-blue-400/10 flex items-center justify-center overflow-hidden">
+                            <img src={[
+                              'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=100&auto=format&fit=crop',
+                              'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=100&auto=format&fit=crop',
+                              'https://images.unsplash.com/photo-1536935338788-846bb9981813?q=80&w=100&auto=format&fit=crop',
+                              'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=100&auto=format&fit=crop'
+                            ][i]} alt={fill} className="w-full h-full object-cover" />
                           </div>
                           <span className="text-[7px] font-black tracking-wider uppercase mt-1 text-center truncate w-12">{fill}</span>
                         </div>
@@ -317,8 +322,8 @@ const GuestOrdering = () => {
                             className="bg-white rounded-2xl p-2.5 flex flex-col justify-between shadow-md cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all border border-blue-100 text-slate-800"
                           >
                             {/* Gradient emoji preview */}
-                            <div className="w-full aspect-[4/3] bg-gradient-to-tr from-blue-50 to-blue-100/60 rounded-xl flex items-center justify-center text-3xl mb-2 relative overflow-hidden">
-                              <span>{item.icon}</span>
+                            <div className="w-full aspect-[4/3] bg-gradient-to-tr from-blue-50 to-blue-100/60 rounded-xl flex items-center justify-center mb-2 relative overflow-hidden">
+                              <img src={item.icon} alt={item.name} className="w-full h-full object-cover" />
                               <span className={`absolute top-1 right-1 w-2 h-2 rounded-full ${item.type === 'veg' ? 'bg-green-500' : 'bg-red-500'}`} title={item.type}></span>
                             </div>
                             
@@ -385,7 +390,7 @@ const GuestOrdering = () => {
 
                     {cart.map((item) => (
                       <div key={item.id} className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 text-left">
-                        <span className="text-2xl mt-1">{item.icon}</span>
+                        <img src={item.icon} alt={item.name} className="w-10 h-10 rounded-lg object-cover mt-1 shrink-0" />
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between items-start">
                             <h4 className="text-[11px] font-black uppercase tracking-wider truncate w-32">{item.name}</h4>
@@ -655,15 +660,15 @@ const GuestOrdering = () => {
                   <div className="bg-white rounded-t-3xl w-full text-slate-800 flex flex-col max-h-[90%] overflow-hidden animate-slide-up">
                     
                     {/* Header */}
-                    <div className="p-4 flex justify-between items-start border-b border-slate-100">
-                      <div>
-                        <span className="text-3xl">{selectedItem.icon}</span>
+                    <div className="p-4 flex justify-between items-start border-b border-slate-100 relative">
+                      <div className="w-full pr-8">
+                        <img src={selectedItem.icon} alt={selectedItem.name} className="w-full h-40 object-cover rounded-xl mb-3 shadow-sm" />
                         <h3 className="text-lg font-black uppercase tracking-wide text-slate-900 mt-1">{selectedItem.name}</h3>
                         <p className="text-xs text-blue-primary font-black mt-0.5">₹{selectedItem.price}</p>
                       </div>
                       <button 
                         onClick={() => setSelectedItem(null)}
-                        className="p-1 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-full"
+                        className="absolute top-6 right-4 p-1 bg-slate-100/80 backdrop-blur hover:bg-slate-200 text-slate-800 rounded-full shadow-sm"
                       >
                         <X size={16} />
                       </button>
